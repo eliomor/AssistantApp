@@ -1,14 +1,19 @@
 import  React , { useEffect} from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import HeaderButton from '../components/UI/HeaderButton';
 import PlaceItem from '../components/PlaceItem';
+import Colors from '../constants/Colors';
 
+import * as placesActions from '../store/places-actions';
 const LocationScreen = (props) => {
   const places = useSelector(state => state.places.places);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(placesActions.loadPlaces());
+  }, [dispatch]);
 
   return (
   <LinearGradient colors={['#C493FF','#FBEAFF']} style={styles.gradient}>
@@ -19,7 +24,7 @@ const LocationScreen = (props) => {
         <PlaceItem
           image={itemData.item.imageUri}
           title={itemData.item.title}
-          address={null}
+          address={itemData.item.address}
           onSelect={() => {
             props.navigation.navigate('LocationDetail', {
               placeTitle: itemData.item.title,
@@ -33,19 +38,16 @@ const LocationScreen = (props) => {
   );
 };
 
+
 LocationScreen.navigationOptions = navData => {
   return {
   headerTitle: 'Locations',
   headerRight: (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="add"
-        iconName={
-          Platform.OS === 'android' ? 'md-add' : 'ios-add'
-        }
-        onPress={()=>{navData.navigation.navigate('AddLocation')}} 
-      />
-    </HeaderButtons>
+
+<TouchableOpacity style={styles.headerButton}  onPress={()=>{navData.navigation.navigate('AddLocation')}}>
+<Text style={styles.headerButtonText}>Add </Text>
+</TouchableOpacity>
+
   ),
  };  
 };
@@ -57,6 +59,13 @@ LocationScreen.navigationOptions = navData => {
       justifyContent: 'center',
       alignItems: 'center'
     },
+    headerButton: {
+      marginHorizontal: 20
+    },
+    headerButtonText: {
+      fontSize: 16,
+      color: Colors.primary
+    }
   }
 );
 

@@ -1,31 +1,43 @@
-import  React , { useEffect, useState} from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, Button, Image } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import React, { useState, useCallback } from 'react';
+import {
+  ScrollView,
+  View,
+  Button,
+  Text,
+  TextInput,
+  StyleSheet
+} from 'react-native';
 import { useDispatch } from 'react-redux';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import HeaderButton from '../components/UI/HeaderButton';
 import Colors from '../constants/Colors';
 import * as placesActions from '../store/places-actions';
 import ImagePicker from '../components/ImagePicker';
+import LocationPicker from '../components/LocationPicker';
 
 const AddLocationScreen = (props) => {
   const dispatch = useDispatch()
   const [titleValue, setTitleValue] =useState('')
   const [selectedImage, setSelectedImage] =useState('')
+  const [selectedLocation, setSelectedLocation] = useState();
 
   const titleChangeHandler = text => {
     setTitleValue(text);
   };
 
   const savePlaceHandler = () => {
-    dispatch(placesActions.addPlace(titleValue, selectedImage));
+    dispatch(placesActions.addPlace(titleValue, selectedImage,selectedLocation));
     props.navigation.goBack(); 
   };
   
   const imageTakenHandler = ImagePath => {
       setSelectedImage(ImagePath);
   };
+
+  const locationPickedHandler = useCallback(location => {
+    setSelectedLocation(location);
+  }, []);
 
 return (
   <LinearGradient colors={['#C493FF','#FBEAFF']} style={styles.gradient}>
@@ -38,6 +50,10 @@ return (
               value={titleValue}
           />
           <ImagePicker onImageTaken={imageTakenHandler} />
+          <LocationPicker
+          navigation={props.navigation}
+          onLocationPicked={locationPickedHandler}
+          />
           <View style={styles.button}>
           <Button title="שמור מקום" color={Colors.primary} onPress={savePlaceHandler} />
           </View>
@@ -61,7 +77,7 @@ AddLocationScreen.navigationOptions = navData => {
       fontSize: 20,
       marginBottom: 15,
       justifyContent: 'center',
-      marginRight: 15
+      marginRight: 30
      },
     textInput: {
       borderBottomColor: '#ccc',
@@ -79,7 +95,7 @@ AddLocationScreen.navigationOptions = navData => {
     button: {
       marginTop:10,
       width:'72%',
-      marginLeft: 18
+      marginLeft: 50
     }
   }
 );

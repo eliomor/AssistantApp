@@ -7,6 +7,7 @@ import EmergencyScreen from '../screens/EmergencyScreen';
 import LocationScreen from '../screens/LocationScreen';
 import AddLocationScreen from '../screens/AddLocationScreen';
 import LocationDetailScreen from '../screens/LocationDetailScreen';
+import MapScreen from '../screens/MapScreen';
 
 import Colors from '../constants/Colors';
 
@@ -16,7 +17,8 @@ const AppNavigator = createStackNavigator(
      Emergency: EmergencyScreen,
      Location: LocationScreen,
      AddLocation: AddLocationScreen,
-     LocationDetail: LocationDetailScreen
+     LocationDetail: LocationDetailScreen,
+     Map: MapScreen
 
     },
     {

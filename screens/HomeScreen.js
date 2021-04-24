@@ -20,10 +20,10 @@ const MenuScreen = (props) => {
     <ScrollView>
     <View >
       <Text style={styles.text}>
-       Welcome To 
+      הגעתם 
       </Text>
       <Text style={styles.text}>
-       Assistant App
+      לאסיסטק!
       </Text>
     </View>
     <FlatList
